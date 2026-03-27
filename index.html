@@ -1,979 +1,2218 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SI-RKH — Sistem Informasi Perencanaan Kerja Harian</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-body: #F4F2EE;
-  --bg-sidebar: #1A1A1F;
-  --bg-sidebar-hover: #2A2A32;
-  --bg-sidebar-active: #33333D;
-  --bg-card: #FFFFFF;
-  --bg-card-alt: #FAFAF8;
-  --bg-input: #F7F6F3;
-  --text-primary: #1A1A1F;
-  --text-secondary: #6B6B76;
-  --text-tertiary: #9C9CA8;
-  --text-sidebar: #A0A0AC;
-  --text-sidebar-active: #FFFFFF;
-  --border: #E8E6E1;
-  --border-light: #F0EEE9;
-  --accent: #2D6A4F;
-  --accent-light: #E8F5EE;
-  --accent-hover: #245840;
-  --do-first: #C62828;
-  --do-first-bg: #FFEBEE;
-  --schedule: #1565C0;
-  --schedule-bg: #E3F2FD;
-  --delegate: #E65100;
-  --delegate-bg: #FFF3E0;
-  --eliminate: #78909C;
-  --eliminate-bg: #ECEFF1;
-  --success: #2E7D32;
-  --success-bg: #E8F5E9;
-  --warning: #F57F17;
-  --warning-bg: #FFFDE7;
-  --danger: #C62828;
-  --danger-bg: #FFEBEE;
-  --info: #1565C0;
-  --info-bg: #E3F2FD;
-  --purple: #5E35B1;
-  --purple-bg: #EDE7F6;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
-  --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --mono: 'DM Mono', monospace;
-  --sidebar-w: 260px;
-  --header-h: 64px;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIPKACA — Sistem Informasi Perencanaan Kerja Harian, Capaian, Monitoring dan Umpan Balik</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-body: #F4F2EE;
+      --bg-sidebar: #1A1A1F;
+      --bg-sidebar-hover: #2A2A32;
+      --bg-sidebar-active: #33333D;
+      --bg-card: #FFFFFF;
+      --bg-card-alt: #FAFAF8;
+      --bg-input: #F7F6F3;
+      --text-primary: #1A1A1F;
+      --text-secondary: #6B6B76;
+      --text-tertiary: #9C9CA8;
+      --text-sidebar: #A0A0AC;
+      --text-sidebar-active: #FFFFFF;
+      --border: #E8E6E1;
+      --border-light: #F0EEE9;
+      --accent: #2D6A4F;
+      --accent-light: #E8F5EE;
+      --accent-hover: #245840;
+      --do-first: #C62828;
+      --do-first-bg: #FFEBEE;
+      --schedule: #1565C0;
+      --schedule-bg: #E3F2FD;
+      --delegate: #E65100;
+      --delegate-bg: #FFF3E0;
+      --eliminate: #78909C;
+      --eliminate-bg: #ECEFF1;
+      --success: #2E7D32;
+      --success-bg: #E8F5E9;
+      --warning: #F57F17;
+      --warning-bg: #FFFDE7;
+      --danger: #C62828;
+      --danger-bg: #FFEBEE;
+      --info: #1565C0;
+      --info-bg: #E3F2FD;
+      --purple: #5E35B1;
+      --purple-bg: #EDE7F6;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --mono: 'DM Mono', monospace;
+      --sidebar-w: 260px;
+      --header-h: 64px;
+    }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { font-size: 14px; }
-body { font-family: var(--font); background: var(--bg-body); color: var(--text-primary); min-height: 100vh; display: flex; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* Sidebar */
-.sidebar {
-  width: var(--sidebar-w); background: var(--bg-sidebar); position: fixed; top:0; left:0; bottom:0;
-  display: flex; flex-direction: column; z-index: 100; transition: transform 0.3s;
-}
-.sidebar-brand {
-  height: var(--header-h); display: flex; align-items: center; padding: 0 20px; gap: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.sidebar-brand .logo {
-  width: 36px; height: 36px; background: var(--accent); border-radius: var(--radius-md);
-  display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px;
-}
-.sidebar-brand .brand-text { color: #fff; }
-.sidebar-brand .brand-text h1 { font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
-.sidebar-brand .brand-text span { font-size: 10px; color: var(--text-sidebar); letter-spacing: 0.5px; text-transform: uppercase; }
+    html {
+      font-size: 14px;
+    }
 
-.sidebar-nav { flex:1; overflow-y: auto; padding: 16px 0; }
-.sidebar-nav::-webkit-scrollbar { width: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg-body);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+    }
 
-.nav-section { padding: 0 20px; margin-bottom: 6px; }
-.nav-section-title {
-  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px;
-  color: rgba(255,255,255,0.25); padding: 12px 0 8px; user-select: none;
-}
-.nav-item {
-  display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 12px;
-  border-radius: var(--radius-md); color: var(--text-sidebar); cursor: pointer;
-  transition: all 0.15s; font-size: 13px; font-weight: 400; user-select: none; position: relative;
-}
-.nav-item:hover { background: var(--bg-sidebar-hover); color: #ddd; }
-.nav-item.active { background: var(--bg-sidebar-active); color: var(--text-sidebar-active); font-weight: 500; }
-.nav-item.active::before {
-  content:''; position:absolute; left:-12px; top:50%; transform:translateY(-50%);
-  width:3px; height:20px; background:var(--accent); border-radius:0 3px 3px 0;
-}
-.nav-item svg { width:18px; height:18px; flex-shrink:0; opacity:0.6; }
-.nav-item.active svg { opacity:1; }
-.nav-badge {
-  margin-left:auto; background:var(--danger); color:#fff; font-size:10px;
-  padding:2px 7px; border-radius:10px; font-weight:600; min-width:20px; text-align:center;
-}
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--bg-sidebar);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform 0.3s;
+    }
 
-.sidebar-user {
-  padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.06);
-  display: flex; align-items: center; gap: 10px;
-}
-.sidebar-user .avatar {
-  width:36px; height:36px; border-radius:50%; background:var(--accent);
-  display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600; font-size:13px;
-}
-.sidebar-user .user-info { flex:1; }
-.sidebar-user .user-info .name { color:#fff; font-size:13px; font-weight:500; }
-.sidebar-user .user-info .role { color:var(--text-sidebar); font-size:11px; }
+    .sidebar-brand {
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
 
-/* Main */
-.main { margin-left: var(--sidebar-w); flex:1; min-height:100vh; display:flex; flex-direction:column; }
+    .sidebar-brand .logo {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+    }
 
-/* Header */
-.header {
-  height: var(--header-h); background: var(--bg-card); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; padding: 0 32px; gap: 16px; position: sticky; top:0; z-index:50;
-}
-.header-title { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
-.header-sub { font-size: 12px; color: var(--text-secondary); }
-.header-right { margin-left:auto; display:flex; align-items:center; gap:12px; }
-.header-date {
-  font-family: var(--mono); font-size: 12px; color: var(--text-secondary);
-  background: var(--bg-input); padding: 6px 14px; border-radius: var(--radius-sm);
-}
-.notif-btn {
-  width:38px; height:38px; border-radius:var(--radius-md); border:1px solid var(--border);
-  background:var(--bg-card); display:flex; align-items:center; justify-content:center; cursor:pointer;
-  position:relative; transition: all 0.15s;
-}
-.notif-btn:hover { background: var(--bg-input); }
-.notif-btn svg { width:18px; height:18px; color:var(--text-secondary); }
-.notif-btn .dot { position:absolute; top:8px; right:8px; width:7px; height:7px; background:var(--danger); border-radius:50%; border:2px solid var(--bg-card); }
+    .sidebar-brand .brand-text {
+      color: #fff;
+    }
 
-/* Content */
-.content { flex:1; padding: 28px 32px; }
+    .sidebar-brand .brand-text h1 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
 
-/* Screen management */
-.screen { display:none; animation: fadeUp 0.3s ease; }
-.screen.active { display:block; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .sidebar-brand .brand-text span {
+      font-size: 10px;
+      color: var(--text-sidebar);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
 
-/* Page header */
-.page-header { margin-bottom: 24px; display:flex; align-items:flex-end; justify-content:space-between; }
-.page-header h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-.page-header p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 0;
+    }
 
-/* Cards */
-.card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
-}
-.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
-.card-header h3 { font-size:15px; font-weight:600; }
-.card-header .card-badge {
-  font-size:11px; padding:4px 12px; border-radius:20px; font-weight:500;
-}
+    .sidebar-nav::-webkit-scrollbar {
+      width: 0;
+    }
 
-/* Alert banner */
-.alert-banner {
-  display:flex; align-items:center; gap:12px; padding:14px 20px;
-  border-radius:var(--radius-lg); margin-bottom:16px; border:1px solid;
-}
-.alert-banner.warning { background:var(--warning-bg); border-color:#FFE082; }
-.alert-banner.warning .alert-icon { color:var(--warning); }
-.alert-banner.success { background:var(--success-bg); border-color:#A5D6A7; }
-.alert-banner .alert-text { flex:1; }
-.alert-banner .alert-text strong { font-size:13px; display:block; }
-.alert-banner .alert-text span { font-size:12px; color:var(--text-secondary); }
+    .nav-section {
+      padding: 0 20px;
+      margin-bottom: 6px;
+    }
 
-/* Form */
-.form-group { margin-bottom:18px; }
-.form-label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; }
-.form-input, .form-select, .form-textarea {
-  width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:var(--radius-md);
-  font-family:var(--font); font-size:13px; background:var(--bg-card); color:var(--text-primary);
-  transition: border-color 0.15s, box-shadow 0.15s; outline:none;
-}
-.form-input:focus, .form-select:focus, .form-textarea:focus {
-  border-color:var(--accent); box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
-}
-.form-input::placeholder, .form-textarea::placeholder { color:var(--text-tertiary); }
-.form-textarea { min-height:80px; resize:vertical; }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+    .nav-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: rgba(255, 255, 255, 0.25);
+      padding: 12px 0 8px;
+      user-select: none;
+    }
 
-/* Eisenhower Matrix */
-.eis-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.eis-option {
-  padding:14px 16px; border:2px solid var(--border); border-radius:var(--radius-md);
-  cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
-}
-.eis-option::before {
-  content:''; position:absolute; top:0; left:0; width:4px; height:100%;
-}
-.eis-option:hover { border-color:var(--text-tertiary); }
-.eis-option.selected { border-width:2px; }
-.eis-option .eis-title { font-size:14px; font-weight:600; margin-bottom:2px; }
-.eis-option .eis-desc { font-size:11px; opacity:0.7; }
-.eis-option .eis-check {
-  position:absolute; top:10px; right:10px; width:20px; height:20px; border-radius:50%;
-  display:none; align-items:center; justify-content:center;
-}
-.eis-option.selected .eis-check { display:flex; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      margin: 2px 12px;
+      border-radius: var(--radius-md);
+      color: var(--text-sidebar);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 13px;
+      font-weight: 400;
+      user-select: none;
+      position: relative;
+    }
 
-.eis-do::before { background:var(--do-first); }
-.eis-do.selected { border-color:var(--do-first); background:var(--do-first-bg); }
-.eis-do.selected .eis-check { background:var(--do-first); color:#fff; }
-.eis-do .eis-title { color:var(--do-first); }
+    .nav-item:hover {
+      background: var(--bg-sidebar-hover);
+      color: #ddd;
+    }
 
-.eis-sc::before { background:var(--schedule); }
-.eis-sc.selected { border-color:var(--schedule); background:var(--schedule-bg); }
-.eis-sc.selected .eis-check { background:var(--schedule); color:#fff; }
-.eis-sc .eis-title { color:var(--schedule); }
+    .nav-item.active {
+      background: var(--bg-sidebar-active);
+      color: var(--text-sidebar-active);
+      font-weight: 500;
+    }
 
-.eis-de::before { background:var(--delegate); }
-.eis-de.selected { border-color:var(--delegate); background:var(--delegate-bg); }
-.eis-de.selected .eis-check { background:var(--delegate); color:#fff; }
-.eis-de .eis-title { color:var(--delegate); }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 0 3px 3px 0;
+    }
 
-.eis-el::before { background:var(--eliminate); }
-.eis-el.selected { border-color:var(--eliminate); background:var(--eliminate-bg); }
-.eis-el.selected .eis-check { background:var(--eliminate); color:#fff; }
-.eis-el .eis-title { color:var(--eliminate); }
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
 
-/* Buttons */
-.btn {
-  display:inline-flex; align-items:center; gap:8px; padding:10px 20px; font-family:var(--font);
-  font-size:13px; font-weight:600; border-radius:var(--radius-md); cursor:pointer;
-  transition:all 0.15s; border:none; outline:none;
-}
-.btn:active { transform:scale(0.97); }
-.btn-primary { background:var(--accent); color:#fff; }
-.btn-primary:hover { background:var(--accent-hover); }
-.btn-secondary { background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border); }
-.btn-secondary:hover { background:var(--border-light); }
-.btn-success { background:var(--success); color:#fff; }
-.btn-danger { background:var(--danger-bg); color:var(--danger); }
-.btn-sm { padding:6px 14px; font-size:12px; }
-.btn-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+    .nav-item.active svg {
+      opacity: 1;
+    }
 
-/* Table */
-.data-table { width:100%; border-collapse:collapse; }
-.data-table thead th {
-  font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.8px;
-  color:var(--text-tertiary); text-align:left; padding:10px 12px;
-  border-bottom:2px solid var(--border);
-}
-.data-table tbody td {
-  padding:12px; font-size:13px; border-bottom:1px solid var(--border-light);
-  vertical-align:middle;
-}
-.data-table tbody tr { transition:background 0.1s; }
-.data-table tbody tr:hover { background:var(--bg-card-alt); }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--danger);
+      color: #fff;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-weight: 600;
+      min-width: 20px;
+      text-align: center;
+    }
 
-/* Badges */
-.badge {
-  display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600;
-  padding:4px 10px; border-radius:20px;
-}
-.badge-success { background:var(--success-bg); color:var(--success); }
-.badge-warning { background:var(--warning-bg); color:var(--warning); }
-.badge-danger { background:var(--danger-bg); color:var(--danger); }
-.badge-info { background:var(--info-bg); color:var(--info); }
-.badge-purple { background:var(--purple-bg); color:var(--purple); }
-.badge-neutral { background:var(--eliminate-bg); color:var(--eliminate); }
-.badge-do { background:var(--do-first-bg); color:var(--do-first); }
-.badge-schedule { background:var(--schedule-bg); color:var(--schedule); }
-.badge-delegate { background:var(--delegate-bg); color:var(--delegate); }
+    .sidebar-user {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-/* Metric cards */
-.metrics-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
-.metric-card {
-  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
-  padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden;
-}
-.metric-card::after {
-  content:''; position:absolute; top:0; left:0; right:0; height:3px;
-}
-.metric-card.mc-total::after { background:var(--accent); }
-.metric-card.mc-done::after { background:var(--success); }
-.metric-card.mc-partial::after { background:var(--warning); }
-.metric-card.mc-pending::after { background:var(--danger); }
-.metric-card .mc-value { font-size:28px; font-weight:700; letter-spacing:-1px; }
-.metric-card .mc-label { font-size:12px; color:var(--text-secondary); margin-top:4px; }
-.metric-card .mc-trend { font-size:11px; margin-top:8px; display:flex; align-items:center; gap:4px; }
+    .sidebar-user .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 13px;
+    }
 
-/* Feedback flow */
-.fb-flow { display:flex; flex-direction:column; gap:0; }
-.fb-step { display:flex; align-items:flex-start; gap:14px; position:relative; padding-bottom:20px; }
-.fb-step:not(:last-child)::after {
-  content:''; position:absolute; left:19px; top:40px; bottom:0; width:2px;
-  background:var(--border); z-index:0;
-}
-.fb-step.completed:not(:last-child)::after { background:var(--accent); }
-.fb-dot {
-  width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:12px; font-weight:700; color:#fff; flex-shrink:0; z-index:1;
-}
-.fb-content { flex:1; padding-top:4px; }
-.fb-content .fb-title { font-size:14px; font-weight:600; }
-.fb-content .fb-person { font-size:12px; color:var(--text-secondary); margin-top:2px; }
+    .sidebar-user .user-info {
+      flex: 1;
+    }
 
-/* Stars */
-.star-rating { display:flex; gap:4px; }
-.star-btn {
-  width:36px; height:36px; border:1px solid var(--border); border-radius:var(--radius-md);
-  background:var(--bg-card); display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:16px; transition:all 0.15s; color:var(--text-tertiary);
-}
-.star-btn.active { background:#FFF8E1; border-color:#FFD54F; color:#F9A825; }
-.star-btn:hover { border-color:var(--text-tertiary); }
+    .sidebar-user .user-info .name {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+    }
 
-/* Status select buttons */
-.status-btns { display:flex; gap:8px; flex-wrap:wrap; }
-.status-btn {
-  padding:8px 18px; border-radius:var(--radius-md); font-size:12px; font-weight:600;
-  cursor:pointer; transition:all 0.15s; border:2px solid var(--border); background:var(--bg-card);
-  font-family:var(--font);
-}
-.status-btn:hover { border-color:var(--text-tertiary); }
-.status-btn.sb-approve { color:var(--success); }
-.status-btn.sb-approve.selected { background:var(--success-bg); border-color:var(--success); }
-.status-btn.sb-revise { color:var(--warning); }
-.status-btn.sb-revise.selected { background:var(--warning-bg); border-color:var(--warning); }
-.status-btn.sb-escalate { color:var(--danger); }
-.status-btn.sb-escalate.selected { background:var(--danger-bg); border-color:var(--danger); }
+    .sidebar-user .user-info .role {
+      color: var(--text-sidebar);
+      font-size: 11px;
+    }
 
-/* Carry-over item */
-.co-item {
-  border:1px solid #FFE082; background:var(--warning-bg); border-radius:var(--radius-lg);
-  padding:16px 20px; margin-bottom:10px; display:flex; align-items:center; gap:16px;
-}
-.co-item .co-info { flex:1; }
-.co-item .co-info h4 { font-size:14px; font-weight:600; margin-bottom:4px; }
-.co-item .co-info p { font-size:12px; color:var(--text-secondary); }
-.co-item .co-progress { text-align:center; }
-.co-item .co-progress .co-pct { font-size:18px; font-weight:700; color:var(--warning); }
-.co-item .co-progress .co-plabel { font-size:10px; color:var(--text-tertiary); }
+    /* Main */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* Notification list */
-.notif-list-item {
-  display:flex; align-items:flex-start; gap:14px; padding:14px 0;
-  border-bottom:1px solid var(--border-light);
-}
-.notif-list-item:last-child { border-bottom:none; }
-.notif-icon {
-  width:36px; height:36px; border-radius:var(--radius-md); display:flex;
-  align-items:center; justify-content:center; flex-shrink:0;
-}
-.notif-text { flex:1; }
-.notif-text strong { font-size:13px; display:block; margin-bottom:2px; }
-.notif-text span { font-size:12px; color:var(--text-secondary); }
-.notif-time { font-size:11px; color:var(--text-tertiary); white-space:nowrap; font-family:var(--mono); }
+    /* Header */
+    .header {
+      height: var(--header-h);
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
 
-/* Progress bars */
-.progress-row { margin-bottom:14px; }
-.progress-row .pr-header { display:flex; justify-content:space-between; margin-bottom:6px; }
-.progress-row .pr-label { font-size:13px; }
-.progress-row .pr-value { font-size:13px; font-weight:600; font-family:var(--mono); }
-.progress-bar { height:8px; background:var(--bg-input); border-radius:4px; overflow:hidden; }
-.progress-fill { height:100%; border-radius:4px; transition:width 0.6s ease; }
+    .header-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
 
-/* Bar chart */
-.bar-chart { display:flex; align-items:flex-end; gap:8px; height:140px; padding-top:20px; }
-.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
-.bar-val { font-size:11px; font-weight:600; font-family:var(--mono); color:var(--text-secondary); }
-.bar-rect { width:100%; border-radius:6px 6px 0 0; transition:height 0.5s ease; min-height:4px; }
-.bar-label { font-size:11px; color:var(--text-tertiary); }
+    .header-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
 
-/* RTL history */
-.rtl-item {
-  display:flex; align-items:center; gap:12px; padding:12px 0;
-  border-bottom:1px solid var(--border-light);
-}
-.rtl-item:last-child { border-bottom:none; }
-.rtl-item .rtl-info { flex:1; }
-.rtl-item .rtl-info h4 { font-size:13px; font-weight:500; }
-.rtl-item .rtl-info p { font-size:12px; color:var(--text-secondary); margin-top:2px; }
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-/* Tabs */
-.tabs { display:flex; gap:2px; background:var(--bg-input); border-radius:var(--radius-md); padding:3px; margin-bottom:20px; width:fit-content; }
-.tab-btn {
-  padding:8px 18px; font-size:12px; font-weight:500; border-radius:var(--radius-sm);
-  cursor:pointer; transition:all 0.15s; border:none; background:transparent;
-  color:var(--text-secondary); font-family:var(--font);
-}
-.tab-btn.active { background:var(--bg-card); color:var(--text-primary); box-shadow:var(--shadow-sm); }
-.tab-btn:hover:not(.active) { color:var(--text-primary); }
+    .header-date {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: var(--bg-input);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+    }
 
-.fb-quote {
-  border-left:3px solid var(--accent); padding:10px 16px; background:var(--bg-card-alt);
-  border-radius:0 var(--radius-sm) var(--radius-sm) 0; margin:8px 0; font-size:13px;
-  color:var(--text-secondary); font-style:italic;
-}
-</style>
+    .notif-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s;
+    }
+
+    .notif-btn:hover {
+      background: var(--bg-input);
+    }
+
+    .notif-btn svg {
+      width: 18px;
+      height: 18px;
+      color: var(--text-secondary);
+    }
+
+    .notif-btn .dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      background: var(--danger);
+      border-radius: 50%;
+      border: 2px solid var(--bg-card);
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 28px 32px;
+    }
+
+    /* Screen management */
+    .screen {
+      display: none;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .page-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .card-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .card-header .card-badge {
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    /* Alert banner */
+    .alert-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 16px;
+      border: 1px solid;
+    }
+
+    .alert-banner.warning {
+      background: var(--warning-bg);
+      border-color: #FFE082;
+    }
+
+    .alert-banner.warning .alert-icon {
+      color: var(--warning);
+    }
+
+    .alert-banner.success {
+      background: var(--success-bg);
+      border-color: #A5D6A7;
+    }
+
+    .alert-banner .alert-text {
+      flex: 1;
+    }
+
+    .alert-banner .alert-text strong {
+      font-size: 13px;
+      display: block;
+    }
+
+    .alert-banner .alert-text span {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 13px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .form-textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Eisenhower Matrix */
+    .eis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .eis-option {
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .eis-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .eis-option:hover {
+      border-color: var(--text-tertiary);
+    }
+
+    .eis-option.selected {
+      border-width: 2px;
+    }
+
+    .eis-option .eis-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .eis-option .eis-desc {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .eis-option .eis-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .eis-option.selected .eis-check {
+      display: flex;
+    }
+
+    .eis-do::before {
+      background: var(--do-first);
+    }
+
+    .eis-do.selected {
+      border-color: var(--do-first);
+      background: var(--do-first-bg);
+    }
+
+    .eis-do.selected .eis-check {
+      background: var(--do-first);
+      color: #fff;
+    }
+
+    .eis-do .eis-title {
+      color: var(--do-first);
+    }
+
+    .eis-sc::before {
+      background: var(--schedule);
+    }
+
+    .eis-sc.selected {
+      border-color: var(--schedule);
+      background: var(--schedule-bg);
+    }
+
+    .eis-sc.selected .eis-check {
+      background: var(--schedule);
+      color: #fff;
+    }
+
+    .eis-sc .eis-title {
+      color: var(--schedule);
+    }
+
+    .eis-de::before {
+      background: var(--delegate);
+    }
+
+    .eis-de.selected {
+      border-color: var(--delegate);
+      background: var(--delegate-bg);
+    }
+
+    .eis-de.selected .eis-check {
+      background: var(--delegate);
+      color: #fff;
+    }
+
+    .eis-de .eis-title {
+      color: var(--delegate);
+    }
+
+    .eis-el::before {
+      background: var(--eliminate);
+    }
+
+    .eis-el.selected {
+      border-color: var(--eliminate);
+      background: var(--eliminate-bg);
+    }
+
+    .eis-el.selected .eis-check {
+      background: var(--eliminate);
+      color: #fff;
+    }
+
+    .eis-el .eis-title {
+      color: var(--eliminate);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      outline: none;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-input);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border-light);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+
+    .btn-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table thead th {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-tertiary);
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .data-table tbody td {
+      padding: 12px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+
+    .data-table tbody tr {
+      transition: background 0.1s;
+    }
+
+    .data-table tbody tr:hover {
+      background: var(--bg-card-alt);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .badge-success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .badge-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .badge-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .badge-info {
+      background: var(--info-bg);
+      color: var(--info);
+    }
+
+    .badge-purple {
+      background: var(--purple-bg);
+      color: var(--purple);
+    }
+
+    .badge-neutral {
+      background: var(--eliminate-bg);
+      color: var(--eliminate);
+    }
+
+    .badge-do {
+      background: var(--do-first-bg);
+      color: var(--do-first);
+    }
+
+    .badge-schedule {
+      background: var(--schedule-bg);
+      color: var(--schedule);
+    }
+
+    .badge-delegate {
+      background: var(--delegate-bg);
+      color: var(--delegate);
+    }
+
+    /* Metric cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .metric-card.mc-total::after {
+      background: var(--accent);
+    }
+
+    .metric-card.mc-done::after {
+      background: var(--success);
+    }
+
+    .metric-card.mc-partial::after {
+      background: var(--warning);
+    }
+
+    .metric-card.mc-pending::after {
+      background: var(--danger);
+    }
+
+    .metric-card .mc-value {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .metric-card .mc-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .metric-card .mc-trend {
+      font-size: 11px;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Feedback flow */
+    .fb-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .fb-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    .fb-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 40px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .fb-step.completed:not(:last-child)::after {
+      background: var(--accent);
+    }
+
+    .fb-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .fb-content {
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .fb-content .fb-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .fb-content .fb-person {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Stars */
+    .star-rating {
+      display: flex;
+      gap: 4px;
+    }
+
+    .star-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.15s;
+      color: var(--text-tertiary);
+    }
+
+    .star-btn.active {
+      background: #FFF8E1;
+      border-color: #FFD54F;
+      color: #F9A825;
+    }
+
+    .star-btn:hover {
+      border-color: var(--text-tertiary);
+    }
+
+    /* Status select buttons */
+    .status-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .status-btn {
+      padding: 8px 18px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 2px solid var(--border);
+      background: var(--bg-card);
+      font-family: var(--font);
+    }
+
+    .status-btn:hover {
+      border-color: var(--text-tertiary);
+    }
+
+    .status-btn.sb-approve {
+      color: var(--success);
+    }
+
+    .status-btn.sb-approve.selected {
+      background: var(--success-bg);
+      border-color: var(--success);
+    }
+
+    .status-btn.sb-revise {
+      color: var(--warning);
+    }
+
+    .status-btn.sb-revise.selected {
+      background: var(--warning-bg);
+      border-color: var(--warning);
+    }
+
+    .status-btn.sb-escalate {
+      color: var(--danger);
+    }
+
+    .status-btn.sb-escalate.selected {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+    }
+
+    /* Carry-over item */
+    .co-item {
+      border: 1px solid #FFE082;
+      background: var(--warning-bg);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .co-item .co-info {
+      flex: 1;
+    }
+
+    .co-item .co-info h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .co-item .co-info p {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .co-item .co-progress {
+      text-align: center;
+    }
+
+    .co-item .co-progress .co-pct {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--warning);
+    }
+
+    .co-item .co-progress .co-plabel {
+      font-size: 10px;
+      color: var(--text-tertiary);
+    }
+
+    /* Notification list */
+    .notif-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .notif-list-item:last-child {
+      border-bottom: none;
+    }
+
+    .notif-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .notif-text {
+      flex: 1;
+    }
+
+    .notif-text strong {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .notif-text span {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .notif-time {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+      font-family: var(--mono);
+    }
+
+    /* Progress bars */
+    .progress-row {
+      margin-bottom: 14px;
+    }
+
+    .progress-row .pr-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .progress-row .pr-label {
+      font-size: 13px;
+    }
+
+    .progress-row .pr-value {
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--mono);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-input);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    /* Bar chart */
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 140px;
+      padding-top: 20px;
+    }
+
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bar-val {
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--mono);
+      color: var(--text-secondary);
+    }
+
+    .bar-rect {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      transition: height 0.5s ease;
+      min-height: 4px;
+    }
+
+    .bar-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
+
+    /* RTL history */
+    .rtl-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .rtl-item:last-child {
+      border-bottom: none;
+    }
+
+    .rtl-item .rtl-info {
+      flex: 1;
+    }
+
+    .rtl-item .rtl-info h4 {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .rtl-item .rtl-info p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      background: var(--bg-input);
+      border-radius: var(--radius-md);
+      padding: 3px;
+      margin-bottom: 20px;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      padding: 8px 18px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: var(--font);
+    }
+
+    .tab-btn.active {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    .fb-quote {
+      border-left: 3px solid var(--accent);
+      padding: 10px 16px;
+      background: var(--bg-card-alt);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 8px 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- Sidebar -->
-<aside class="sidebar">
-  <div class="sidebar-brand">
-    <div class="logo">RK</div>
-    <div class="brand-text">
-      <h1>SI-RKH</h1>
-      <span>Perencanaan Kerja</span>
-    </div>
-  </div>
-
-  <nav class="sidebar-nav">
-    <div class="nav-section">
-      <div class="nav-section-title">Menu utama</div>
-      <div class="nav-item active" onclick="showScreen('dashboard')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Dashboard
-      </div>
-      <div class="nav-item" onclick="showScreen('proker')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-        Program Kerja Tahunan
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">RK</div>
+      <div class="brand-text">
+        <h1>SIPKACA</h1>
+        <span>Perencanaan Kerja Harian</span>
       </div>
     </div>
 
-    <div class="nav-section">
-      <div class="nav-section-title">Harian</div>
-      <div class="nav-item" onclick="showScreen('rkh')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Rencana Kerja Harian
-        <span class="nav-badge">2</span>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Menu utama</div>
+        <div class="nav-item active" onclick="showScreen('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          Dashboard
+        </div>
+        <div class="nav-item" onclick="showScreen('proker')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 016.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
+          </svg>
+          Program Kerja Tahunan
+        </div>
       </div>
-      <div class="nav-item" onclick="showScreen('capaian')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        Capaian Akhir Hari
+
+      <div class="nav-section">
+        <div class="nav-section-title">Harian</div>
+        <div class="nav-item" onclick="showScreen('rkh')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Rencana Kerja Harian
+          <span class="nav-badge">2</span>
+        </div>
+        <div class="nav-item" onclick="showScreen('capaian')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+          Capaian Akhir Hari
+        </div>
+        <div class="nav-item" onclick="showScreen('carryover')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+          </svg>
+          Carry-Over
+          <span class="nav-badge">2</span>
+        </div>
       </div>
-      <div class="nav-item" onclick="showScreen('carryover')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
-        Carry-Over
-        <span class="nav-badge">2</span>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Evaluasi</div>
+        <div class="nav-item" onclick="showScreen('feedback')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>
+          Umpan Balik
+        </div>
+        <div class="nav-item" onclick="showScreen('rtl')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Rencana Tindak Lanjut
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Sistem</div>
+        <div class="nav-item" onclick="showScreen('notifikasi')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 01-3.46 0" />
+          </svg>
+          Notifikasi
+          <span class="nav-badge">4</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="avatar">BS</div>
+      <div class="user-info">
+        <div class="name">Budi Santoso</div>
+        <div class="role">Staf — Unit Pelayanan Medis</div>
       </div>
     </div>
+  </aside>
 
-    <div class="nav-section">
-      <div class="nav-section-title">Evaluasi</div>
-      <div class="nav-item" onclick="showScreen('feedback')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        Umpan Balik
+  <!-- Main Content -->
+  <div class="main">
+    <header class="header">
+      <div>
+        <div class="header-title" id="headerTitle">Dashboard</div>
+        <div class="header-sub" id="headerSub">Ringkasan kinerja harian</div>
       </div>
-      <div class="nav-item" onclick="showScreen('rtl')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Rencana Tindak Lanjut
-      </div>
-    </div>
-
-    <div class="nav-section">
-      <div class="nav-section-title">Sistem</div>
-      <div class="nav-item" onclick="showScreen('notifikasi')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        Notifikasi
-        <span class="nav-badge">4</span>
-      </div>
-    </div>
-  </nav>
-
-  <div class="sidebar-user">
-    <div class="avatar">BS</div>
-    <div class="user-info">
-      <div class="name">Budi Santoso</div>
-      <div class="role">Staf — Unit Pelayanan Medis</div>
-    </div>
-  </div>
-</aside>
-
-<!-- Main Content -->
-<div class="main">
-  <header class="header">
-    <div>
-      <div class="header-title" id="headerTitle">Dashboard</div>
-      <div class="header-sub" id="headerSub">Ringkasan kinerja harian</div>
-    </div>
-    <div class="header-right">
-      <div class="header-date">Rabu, 26 Mar 2026</div>
-      <div class="notif-btn" onclick="showScreen('notifikasi')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        <div class="dot"></div>
-      </div>
-    </div>
-  </header>
-
-  <div class="content">
-
-    <!-- ====== DASHBOARD ====== -->
-    <div class="screen active" id="screen-dashboard">
-      <div class="page-header">
-        <div>
-          <h2>Selamat pagi, Budi</h2>
-          <p>Berikut ringkasan kinerja Anda hari ini</p>
-        </div>
-        <button class="btn btn-primary" onclick="showScreen('rkh')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Input RKH
-        </button>
-      </div>
-
-      <div class="alert-banner warning">
-        <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div class="alert-text">
-          <strong>2 kegiatan carry-over dari kemarin</strong>
-          <span>Terdapat kegiatan belum selesai yang perlu ditindaklanjuti</span>
-        </div>
-        <button class="btn btn-sm btn-secondary" onclick="showScreen('carryover')">Lihat</button>
-      </div>
-
-      <div class="metrics-grid">
-        <div class="metric-card mc-total">
-          <div class="mc-value">12</div>
-          <div class="mc-label">Total kegiatan hari ini</div>
-          <div class="mc-trend" style="color:var(--info)">+3 dari carry-over</div>
-        </div>
-        <div class="metric-card mc-done">
-          <div class="mc-value" style="color:var(--success)">8</div>
-          <div class="mc-label">Selesai</div>
-          <div class="mc-trend" style="color:var(--success)">&#9650; 67%</div>
-        </div>
-        <div class="metric-card mc-partial">
-          <div class="mc-value" style="color:var(--warning)">3</div>
-          <div class="mc-label">Sebagian selesai</div>
-          <div class="mc-trend" style="color:var(--warning)">25%</div>
-        </div>
-        <div class="metric-card mc-pending">
-          <div class="mc-value" style="color:var(--danger)">1</div>
-          <div class="mc-label">Belum dikerjakan</div>
-          <div class="mc-trend" style="color:var(--danger)">8%</div>
+      <div class="header-right">
+        <div class="header-date">Rabu, 26 Mar 2026</div>
+        <div class="notif-btn" onclick="showScreen('notifikasi')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 01-3.46 0" />
+          </svg>
+          <div class="dot"></div>
         </div>
       </div>
+    </header>
 
-      <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;">
-        <div class="card">
-          <div class="card-header"><h3>Capaian per prioritas</h3></div>
-          <div class="progress-row"><div class="pr-header"><span class="pr-label"><span class="badge badge-danger">Do first</span>&nbsp; 5 kegiatan</span><span class="pr-value">80%</span></div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--do-first)"></div></div></div>
-          <div class="progress-row"><div class="pr-header"><span class="pr-label"><span class="badge badge-info">Schedule</span>&nbsp; 4 kegiatan</span><span class="pr-value">75%</span></div><div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--schedule)"></div></div></div>
-          <div class="progress-row"><div class="pr-header"><span class="pr-label"><span class="badge badge-delegate">Delegate</span>&nbsp; 2 kegiatan</span><span class="pr-value">50%</span></div><div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--delegate)"></div></div></div>
-          <div class="progress-row"><div class="pr-header"><span class="pr-label"><span class="badge badge-neutral">Eliminate</span>&nbsp; 1 kegiatan</span><span class="pr-value">100%</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--eliminate)"></div></div></div>
-        </div>
+    <div class="content">
 
-        <div class="card">
-          <div class="card-header"><h3>Skor kinerja (7 hari)</h3></div>
-          <div class="bar-chart">
-            <div class="bar-col"><span class="bar-val">3.5</span><div class="bar-rect" style="height:56px;background:var(--accent)"></div><span class="bar-label">Sen</span></div>
-            <div class="bar-col"><span class="bar-val">4.0</span><div class="bar-rect" style="height:64px;background:var(--accent)"></div><span class="bar-label">Sel</span></div>
-            <div class="bar-col"><span class="bar-val">3.2</span><div class="bar-rect" style="height:51px;background:var(--accent)"></div><span class="bar-label">Rab</span></div>
-            <div class="bar-col"><span class="bar-val">4.5</span><div class="bar-rect" style="height:72px;background:var(--accent)"></div><span class="bar-label">Kam</span></div>
-            <div class="bar-col"><span class="bar-val">4.8</span><div class="bar-rect" style="height:77px;background:var(--accent)"></div><span class="bar-label">Jum</span></div>
-            <div class="bar-col"><span class="bar-val">—</span><div class="bar-rect" style="height:6px;background:var(--border)"></div><span class="bar-label">Sab</span></div>
-            <div class="bar-col"><span class="bar-val">—</span><div class="bar-rect" style="height:6px;background:var(--border)"></div><span class="bar-label">Min</span></div>
-          </div>
-          <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-secondary)">Rata-rata: <strong style="color:var(--accent)">4.0 / 5.0</strong></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Kegiatan hari ini</h3><span class="badge badge-info" style="cursor:pointer" onclick="showScreen('rkh')">Lihat semua</span></div>
-        <table class="data-table">
-          <thead><tr><th>Kegiatan</th><th>Program kerja</th><th>Prioritas</th><th>Target</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td style="font-weight:500">Verifikasi data pasien</td><td style="font-size:12px;color:var(--text-secondary)">PKT-001 Mutu Rawat Jalan</td><td><span class="badge badge-do">Do first</span></td><td style="font-family:var(--mono);font-size:12px">10:00</td><td><span class="badge badge-success">Selesai</span></td></tr>
-            <tr><td style="font-weight:500">Update SOP pendaftaran</td><td style="font-size:12px;color:var(--text-secondary)">PKT-002 Digitalisasi RM</td><td><span class="badge badge-schedule">Schedule</span></td><td style="font-family:var(--mono);font-size:12px">13:00</td><td><span class="badge badge-warning">Sebagian</span></td></tr>
-            <tr><td style="font-weight:500">Rapat koordinasi mutu</td><td style="font-size:12px;color:var(--text-secondary)">PKT-001 Mutu Rawat Jalan</td><td><span class="badge badge-do">Do first</span></td><td style="font-family:var(--mono);font-size:12px">14:00</td><td><span class="badge badge-neutral">Belum</span></td></tr>
-            <tr><td style="font-weight:500">Pelatihan sistem baru</td><td style="font-size:12px;color:var(--text-secondary)">PKT-003 Pelatihan SDM</td><td><span class="badge badge-delegate">Delegate</span></td><td style="font-family:var(--mono);font-size:12px">16:00</td><td><span class="badge badge-success">Selesai</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ====== PROGRAM KERJA ====== -->
-    <div class="screen" id="screen-proker">
-      <div class="page-header">
-        <div><h2>Program Kerja Tahunan</h2><p>Kelola program kerja unit sebagai acuan RKH</p></div>
-        <button class="btn btn-primary">+ Tambah program</button>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Input program kerja baru</h3></div>
-        <div class="form-group"><label class="form-label">Unit</label><select class="form-select"><option value="">Pilih unit...</option><option>Unit Pelayanan Medis</option><option>Unit Keperawatan</option><option>Unit Penunjang Medis</option><option>Unit Administrasi & Keuangan</option><option>Unit SDM & Diklat</option></select></div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Kode program</label><input class="form-input" placeholder="PKT-2026-001"></div>
-          <div class="form-group"><label class="form-label">Anggaran (IDR)</label><input class="form-input" placeholder="Rp 50.000.000"></div>
-        </div>
-        <div class="form-group"><label class="form-label">Nama program</label><input class="form-input" placeholder="Peningkatan Mutu Layanan Rawat Jalan"></div>
-        <div class="form-group"><label class="form-label">Sasaran</label><textarea class="form-textarea" placeholder="Meningkatkan kepuasan pasien rawat jalan hingga 90% pada akhir tahun 2026"></textarea></div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Indikator keberhasilan</label><input class="form-input" placeholder="Skor kepuasan pasien ≥ 90%"></div>
-          <div class="form-group"><label class="form-label">Target output</label><input class="form-input" placeholder="12 bulan / 1.200 pasien"></div>
-        </div>
-        <div class="btn-actions"><button class="btn btn-secondary">Batal</button><button class="btn btn-primary">Simpan program</button></div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Daftar program kerja</h3><span class="badge badge-info">3 program</span></div>
-        <table class="data-table">
-          <thead><tr><th>Kode</th><th>Nama program</th><th>Unit</th><th>Anggaran</th><th>Target</th></tr></thead>
-          <tbody>
-            <tr><td style="font-family:var(--mono);font-size:12px;font-weight:500">PKT-001</td><td style="font-weight:500">Peningkatan Mutu Layanan Rawat Jalan</td><td style="font-size:12px">Unit Pelayanan Medis</td><td style="font-family:var(--mono);font-size:12px">Rp 50.000.000</td><td style="font-size:12px">1.200 pasien/th</td></tr>
-            <tr><td style="font-family:var(--mono);font-size:12px;font-weight:500">PKT-002</td><td style="font-weight:500">Digitalisasi Rekam Medis</td><td style="font-size:12px">Unit Penunjang Medis</td><td style="font-family:var(--mono);font-size:12px">Rp 120.000.000</td><td style="font-size:12px">100% digital Q4</td></tr>
-            <tr><td style="font-family:var(--mono);font-size:12px;font-weight:500">PKT-003</td><td style="font-weight:500">Pelatihan SDM Berkelanjutan</td><td style="font-size:12px">Unit SDM & Diklat</td><td style="font-family:var(--mono);font-size:12px">Rp 35.000.000</td><td style="font-size:12px">24 sesi/th</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ====== RENCANA KERJA HARIAN ====== -->
-    <div class="screen" id="screen-rkh">
-      <div class="page-header">
-        <div><h2>Rencana Kerja Harian</h2><p>Rabu, 26 Maret 2026</p></div>
-      </div>
-
-      <div class="alert-banner warning">
-        <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
-        <div class="alert-text"><strong>2 kegiatan carry-over</strong><span>Kegiatan dari kemarin yang belum selesai telah dipindahkan</span></div>
-        <button class="btn btn-sm btn-secondary" onclick="showScreen('carryover')">Kelola</button>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Tambah kegiatan baru</h3></div>
-        <div class="form-group"><label class="form-label">Nama kegiatan</label><input class="form-input" placeholder="Rapat koordinasi mutu layanan"></div>
-        <div class="form-group"><label class="form-label">Program kerja tahunan</label><select class="form-select"><option value="">Pilih program kerja...</option><option>PKT-001 — Peningkatan Mutu Layanan Rawat Jalan</option><option>PKT-002 — Digitalisasi Rekam Medis</option><option>PKT-003 — Pelatihan SDM Berkelanjutan</option></select></div>
-        <div class="form-group"><label class="form-label">Deskripsi / detail kegiatan</label><textarea class="form-textarea" placeholder="Koordinasi dengan tim mutu terkait evaluasi indikator triwulan I 2026..."></textarea></div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Target selesai (jam)</label><input class="form-input" type="time" value="14:00"></div>
-          <div class="form-group"><label class="form-label">Lokasi kegiatan</label><input class="form-input" placeholder="Ruang Rapat Lt. 2"></div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Prioritas (Eisenhower matrix)</label>
-          <div class="eis-grid">
-            <div class="eis-option eis-do selected" onclick="selectEis(this)">
-              <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              <div class="eis-title">Do first</div>
-              <div class="eis-desc">Penting & mendesak — kerjakan segera</div>
-            </div>
-            <div class="eis-option eis-sc" onclick="selectEis(this)">
-              <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              <div class="eis-title">Schedule</div>
-              <div class="eis-desc">Penting, tidak mendesak — jadwalkan</div>
-            </div>
-            <div class="eis-option eis-de" onclick="selectEis(this)">
-              <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              <div class="eis-title">Delegate</div>
-              <div class="eis-desc">Mendesak, tidak penting — delegasikan</div>
-            </div>
-            <div class="eis-option eis-el" onclick="selectEis(this)">
-              <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              <div class="eis-title">Eliminate</div>
-              <div class="eis-desc">Tidak penting & tidak mendesak — eliminasi</div>
-            </div>
-          </div>
-        </div>
-        <div class="btn-actions"><button class="btn btn-secondary">+ Tambah lagi</button><button class="btn btn-primary">Submit RKH hari ini</button></div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Daftar RKH — 26 Maret 2026</h3><span class="badge badge-info">5 kegiatan</span></div>
-        <table class="data-table">
-          <thead><tr><th>Kegiatan</th><th>Program</th><th>Prioritas</th><th>Target</th><th>Lokasi</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td style="font-weight:500">Verifikasi data pasien</td><td style="font-size:12px;color:var(--text-secondary)">PKT-001</td><td><span class="badge badge-do">Do first</span></td><td style="font-family:var(--mono);font-size:12px">10:00</td><td style="font-size:12px">Ruang Admin</td><td><span class="badge badge-success">Selesai</span></td></tr>
-            <tr><td style="font-weight:500">Update SOP pendaftaran<br><span style="font-size:11px;color:var(--warning)">&#8635; carry-over</span></td><td style="font-size:12px;color:var(--text-secondary)">PKT-002</td><td><span class="badge badge-schedule">Schedule</span></td><td style="font-family:var(--mono);font-size:12px">13:00</td><td style="font-size:12px">Ruang IT</td><td><span class="badge badge-warning">Sebagian</span></td></tr>
-            <tr><td style="font-weight:500">Rapat koordinasi mutu</td><td style="font-size:12px;color:var(--text-secondary)">PKT-001</td><td><span class="badge badge-do">Do first</span></td><td style="font-family:var(--mono);font-size:12px">14:00</td><td style="font-size:12px">Ruang Rapat Lt.2</td><td><span class="badge badge-neutral">Belum</span></td></tr>
-            <tr><td style="font-weight:500">Pelatihan sistem baru</td><td style="font-size:12px;color:var(--text-secondary)">PKT-003</td><td><span class="badge badge-delegate">Delegate</span></td><td style="font-family:var(--mono);font-size:12px">16:00</td><td style="font-size:12px">Lab Komputer</td><td><span class="badge badge-success">Selesai</span></td></tr>
-            <tr><td style="font-weight:500">Review data klaim BPJS<br><span style="font-size:11px;color:var(--warning)">&#8635; carry-over</span></td><td style="font-size:12px;color:var(--text-secondary)">PKT-001</td><td><span class="badge badge-do">Do first</span></td><td style="font-family:var(--mono);font-size:12px">17:00</td><td style="font-size:12px">Ruang Keuangan</td><td><span class="badge badge-warning">Sebagian</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ====== CAPAIAN ====== -->
-    <div class="screen" id="screen-capaian">
-      <div class="page-header">
-        <div><h2>Capaian Akhir Hari</h2><p>Input status dan keterangan capaian per kegiatan</p></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h3>Capaian — 26 Maret 2026</h3></div>
-        <table class="data-table">
-          <thead><tr><th style="width:25%">Kegiatan</th><th>Prioritas</th><th style="width:18%">Status capaian</th><th style="width:35%">Keterangan</th></tr></thead>
-          <tbody>
-            <tr>
-              <td style="font-weight:500">Verifikasi data pasien</td>
-              <td><span class="badge badge-do">Do first</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:6px 10px"><option selected>Selesai</option><option>Sebagian</option><option>Belum</option></select></td>
-              <td><input class="form-input" style="font-size:12px;padding:6px 10px" value="Selesai 45 berkas, tidak ada kendala"></td>
-            </tr>
-            <tr>
-              <td style="font-weight:500">Update SOP pendaftaran</td>
-              <td><span class="badge badge-schedule">Schedule</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:6px 10px"><option>Selesai</option><option selected>Sebagian</option><option>Belum</option></select></td>
-              <td><input class="form-input" style="font-size:12px;padding:6px 10px" value="Draft 70% selesai, menunggu review legal"></td>
-            </tr>
-            <tr>
-              <td style="font-weight:500">Rapat koordinasi mutu</td>
-              <td><span class="badge badge-do">Do first</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:6px 10px"><option selected>Selesai</option><option>Sebagian</option><option>Belum</option></select></td>
-              <td><input class="form-input" style="font-size:12px;padding:6px 10px" value="MoM sudah dibuat dan didistribusikan"></td>
-            </tr>
-            <tr>
-              <td style="font-weight:500">Pelatihan sistem baru</td>
-              <td><span class="badge badge-delegate">Delegate</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:6px 10px"><option selected>Selesai</option><option>Sebagian</option><option>Belum</option></select></td>
-              <td><input class="form-input" style="font-size:12px;padding:6px 10px" value="20 peserta hadir, materi tersampaikan"></td>
-            </tr>
-            <tr>
-              <td style="font-weight:500">Review data klaim BPJS</td>
-              <td><span class="badge badge-do">Do first</span></td>
-              <td><select class="form-select" style="font-size:12px;padding:6px 10px"><option>Selesai</option><option selected>Sebagian</option><option>Belum</option></select></td>
-              <td><input class="form-input" style="font-size:12px;padding:6px 10px" value="40% selesai, data bulan Feb masih pending"></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="btn-actions" style="margin-top:16px"><button class="btn btn-primary">Submit capaian hari ini</button></div>
-      </div>
-    </div>
-
-    <!-- ====== CARRY OVER ====== -->
-    <div class="screen" id="screen-carryover">
-      <div class="page-header">
-        <div><h2>Carry-Over</h2><p>Kegiatan dari hari sebelumnya yang belum terselesaikan</p></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h3>Kegiatan tertunda</h3><span class="badge badge-warning">2 item</span></div>
-        <div class="co-item">
-          <div style="width:4px;height:60px;border-radius:2px;background:var(--schedule);flex-shrink:0"></div>
-          <div class="co-info">
-            <h4>Update SOP pendaftaran</h4>
-            <p>Dari: 25 Mar 2026 &nbsp;|&nbsp; Program: PKT-002 &nbsp;|&nbsp; Prioritas: <span style="color:var(--schedule);font-weight:600">Schedule</span></p>
-          </div>
-          <div class="co-progress"><div class="co-pct">70%</div><div class="co-plabel">Capaian</div></div>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-sm btn-success" style="color:#fff">Lanjutkan</button>
-            <button class="btn btn-sm btn-danger">Hapus</button>
-          </div>
-        </div>
-        <div class="co-item">
-          <div style="width:4px;height:60px;border-radius:2px;background:var(--do-first);flex-shrink:0"></div>
-          <div class="co-info">
-            <h4>Review data klaim BPJS</h4>
-            <p>Dari: 25 Mar 2026 &nbsp;|&nbsp; Program: PKT-001 &nbsp;|&nbsp; Prioritas: <span style="color:var(--do-first);font-weight:600">Do first</span></p>
-          </div>
-          <div class="co-progress"><div class="co-pct">40%</div><div class="co-plabel">Capaian</div></div>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-sm btn-success" style="color:#fff">Lanjutkan</button>
-            <button class="btn btn-sm btn-danger">Hapus</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ====== UMPAN BALIK ====== -->
-    <div class="screen" id="screen-feedback">
-      <div class="page-header">
-        <div><h2>Umpan Balik Hierarkis</h2><p>Review berjenjang: Supervisor → Kepala Bidang → Wakil Direktur</p></div>
-      </div>
-
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchFbTab(this,0)">Review kegiatan</button>
-        <button class="tab-btn" onclick="switchFbTab(this,1)">Riwayat umpan balik</button>
-      </div>
-
-      <div id="fb-tab-0">
-        <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;">
-          <div class="card" style="padding:20px">
-            <h3 style="font-size:14px;margin-bottom:16px">Alur umpan balik</h3>
-            <div class="fb-flow">
-              <div class="fb-step completed">
-                <div class="fb-dot" style="background:var(--accent)">L1</div>
-                <div class="fb-content"><div class="fb-title">Supervisor</div><div class="fb-person">Dr. Rina Wati</div><span class="badge badge-success" style="margin-top:6px">Aktif</span></div>
-              </div>
-              <div class="fb-step">
-                <div class="fb-dot" style="background:var(--purple)">L2</div>
-                <div class="fb-content"><div class="fb-title">Kepala bidang</div><div class="fb-person">Dr. Ahmad Fauzi</div><span class="badge badge-neutral" style="margin-top:6px">Menunggu</span></div>
-              </div>
-              <div class="fb-step">
-                <div class="fb-dot" style="background:var(--do-first)">L3</div>
-                <div class="fb-content"><div class="fb-title">Wakil direktur</div><div class="fb-person">Prof. Hendra</div><span class="badge badge-neutral" style="margin-top:6px">Menunggu</span></div>
-              </div>
-            </div>
-            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-              <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Staf yang direview</div>
-              <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
-                <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600">BS</div>
-                <div><div style="font-size:13px;font-weight:500">Budi Santoso</div><div style="font-size:11px;color:var(--text-secondary)">26 Maret 2026</div></div>
-              </div>
-            </div>
-          </div>
-
+      <!-- ====== DASHBOARD ====== -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="page-header">
           <div>
-            <div class="card">
-              <div class="card-header"><h3>Form umpan balik — Supervisor (L1)</h3></div>
-              <div style="background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 16px;margin-bottom:16px">
-                <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Kegiatan yang direview</div>
-                <div style="font-size:14px;font-weight:600">Update SOP pendaftaran</div>
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">Status capaian: <span class="badge badge-warning">Sebagian — 70%</span></div>
+            <h2>Selamat pagi, Budi</h2>
+            <p>Berikut ringkasan kinerja Anda hari ini</p>
+          </div>
+          <button class="btn btn-primary" onclick="showScreen('rkh')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Input RKH
+          </button>
+        </div>
+
+        <div class="alert-banner warning">
+          <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <div class="alert-text">
+            <strong>2 kegiatan carry-over dari kemarin</strong>
+            <span>Terdapat kegiatan belum selesai yang perlu ditindaklanjuti</span>
+          </div>
+          <button class="btn btn-sm btn-secondary" onclick="showScreen('carryover')">Lihat</button>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card mc-total">
+            <div class="mc-value">12</div>
+            <div class="mc-label">Total kegiatan hari ini</div>
+            <div class="mc-trend" style="color:var(--info)">+3 dari carry-over</div>
+          </div>
+          <div class="metric-card mc-done">
+            <div class="mc-value" style="color:var(--success)">8</div>
+            <div class="mc-label">Selesai</div>
+            <div class="mc-trend" style="color:var(--success)">&#9650; 67%</div>
+          </div>
+          <div class="metric-card mc-partial">
+            <div class="mc-value" style="color:var(--warning)">3</div>
+            <div class="mc-label">Sebagian selesai</div>
+            <div class="mc-trend" style="color:var(--warning)">25%</div>
+          </div>
+          <div class="metric-card mc-pending">
+            <div class="mc-value" style="color:var(--danger)">1</div>
+            <div class="mc-label">Belum dikerjakan</div>
+            <div class="mc-trend" style="color:var(--danger)">8%</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;">
+          <div class="card">
+            <div class="card-header">
+              <h3>Capaian per prioritas</h3>
+            </div>
+            <div class="progress-row">
+              <div class="pr-header"><span class="pr-label"><span class="badge badge-danger">Do first</span>&nbsp; 5
+                  kegiatan</span><span class="pr-value">80%</span></div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:80%;background:var(--do-first)"></div>
               </div>
-              <div class="form-group"><label class="form-label">Isi umpan balik</label><textarea class="form-textarea" placeholder="Perlu dipercepat penyelesaian draft SOP. Pastikan melibatkan bagian legal sebelum finalisasi..."></textarea></div>
-              <div class="form-group">
-                <label class="form-label">Skor kinerja</label>
-                <div class="star-rating">
-                  <div class="star-btn active" onclick="setStars(this,1)">1</div>
-                  <div class="star-btn active" onclick="setStars(this,2)">2</div>
-                  <div class="star-btn active" onclick="setStars(this,3)">3</div>
-                  <div class="star-btn" onclick="setStars(this,4)">4</div>
-                  <div class="star-btn" onclick="setStars(this,5)">5</div>
-                </div>
+            </div>
+            <div class="progress-row">
+              <div class="pr-header"><span class="pr-label"><span class="badge badge-info">Schedule</span>&nbsp; 4
+                  kegiatan</span><span class="pr-value">75%</span></div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:75%;background:var(--schedule)"></div>
               </div>
-              <div class="form-group">
-                <label class="form-label">Status review</label>
-                <div class="status-btns">
-                  <button class="status-btn sb-approve" onclick="selectStatus(this)">&#10003; Setujui</button>
-                  <button class="status-btn sb-revise selected" onclick="selectStatus(this)">&#9998; Perlu perbaikan</button>
-                  <button class="status-btn sb-escalate" onclick="selectStatus(this)">&#8679; Eskalasi ke L2</button>
-                </div>
+            </div>
+            <div class="progress-row">
+              <div class="pr-header"><span class="pr-label"><span class="badge badge-delegate">Delegate</span>&nbsp; 2
+                  kegiatan</span><span class="pr-value">50%</span></div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:50%;background:var(--delegate)"></div>
               </div>
-              <div class="btn-actions"><button class="btn btn-primary">Kirim umpan balik</button></div>
+            </div>
+            <div class="progress-row">
+              <div class="pr-header"><span class="pr-label"><span class="badge badge-neutral">Eliminate</span>&nbsp; 1
+                  kegiatan</span><span class="pr-value">100%</span></div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:100%;background:var(--eliminate)"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Skor kinerja (7 hari)</h3>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-col"><span class="bar-val">3.5</span>
+                <div class="bar-rect" style="height:56px;background:var(--accent)"></div><span
+                  class="bar-label">Sen</span>
+              </div>
+              <div class="bar-col"><span class="bar-val">4.0</span>
+                <div class="bar-rect" style="height:64px;background:var(--accent)"></div><span
+                  class="bar-label">Sel</span>
+              </div>
+              <div class="bar-col"><span class="bar-val">3.2</span>
+                <div class="bar-rect" style="height:51px;background:var(--accent)"></div><span
+                  class="bar-label">Rab</span>
+              </div>
+              <div class="bar-col"><span class="bar-val">4.5</span>
+                <div class="bar-rect" style="height:72px;background:var(--accent)"></div><span
+                  class="bar-label">Kam</span>
+              </div>
+              <div class="bar-col"><span class="bar-val">4.8</span>
+                <div class="bar-rect" style="height:77px;background:var(--accent)"></div><span
+                  class="bar-label">Jum</span>
+              </div>
+              <div class="bar-col"><span class="bar-val">—</span>
+                <div class="bar-rect" style="height:6px;background:var(--border)"></div><span
+                  class="bar-label">Sab</span>
+              </div>
+              <div class="bar-col"><span class="bar-val">—</span>
+                <div class="bar-rect" style="height:6px;background:var(--border)"></div><span
+                  class="bar-label">Min</span>
+              </div>
+            </div>
+            <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-secondary)">Rata-rata: <strong
+                style="color:var(--accent)">4.0 / 5.0</strong></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Kegiatan hari ini</h3><span class="badge badge-info" style="cursor:pointer"
+              onclick="showScreen('rkh')">Lihat semua</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Kegiatan</th>
+                <th>Program kerja</th>
+                <th>Prioritas</th>
+                <th>Target</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:500">Verifikasi data pasien</td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-001 Mutu Rawat Jalan</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td style="font-family:var(--mono);font-size:12px">10:00</td>
+                <td><span class="badge badge-success">Selesai</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Update SOP pendaftaran</td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-002 Digitalisasi RM</td>
+                <td><span class="badge badge-schedule">Schedule</span></td>
+                <td style="font-family:var(--mono);font-size:12px">13:00</td>
+                <td><span class="badge badge-warning">Sebagian</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Rapat koordinasi mutu</td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-001 Mutu Rawat Jalan</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td style="font-family:var(--mono);font-size:12px">14:00</td>
+                <td><span class="badge badge-neutral">Belum</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Pelatihan sistem baru</td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-003 Pelatihan SDM</td>
+                <td><span class="badge badge-delegate">Delegate</span></td>
+                <td style="font-family:var(--mono);font-size:12px">16:00</td>
+                <td><span class="badge badge-success">Selesai</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====== PROGRAM KERJA ====== -->
+      <div class="screen" id="screen-proker">
+        <div class="page-header">
+          <div>
+            <h2>Program Kerja Tahunan</h2>
+            <p>Kelola program kerja unit sebagai acuan RKH</p>
+          </div>
+          <button class="btn btn-primary">+ Tambah program</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Input program kerja baru</h3>
+          </div>
+          <div class="form-group"><label class="form-label">Unit</label><select class="form-select">
+              <option value="">Pilih unit...</option>
+              <option>Unit Pelayanan Medis</option>
+              <option>Unit Keperawatan</option>
+              <option>Unit Penunjang Medis</option>
+              <option>Unit Administrasi & Keuangan</option>
+              <option>Unit SDM & Diklat</option>
+            </select></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Kode program</label><input class="form-input"
+                placeholder="PKT-2026-001"></div>
+            <div class="form-group"><label class="form-label">Anggaran (IDR)</label><input class="form-input"
+                placeholder="Rp 50.000.000"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Nama program</label><input class="form-input"
+              placeholder="Peningkatan Mutu Layanan Rawat Jalan"></div>
+          <div class="form-group"><label class="form-label">Sasaran</label><textarea class="form-textarea"
+              placeholder="Meningkatkan kepuasan pasien rawat jalan hingga 90% pada akhir tahun 2026"></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Indikator keberhasilan</label><input class="form-input"
+                placeholder="Skor kepuasan pasien ≥ 90%"></div>
+            <div class="form-group"><label class="form-label">Target output</label><input class="form-input"
+                placeholder="12 bulan / 1.200 pasien"></div>
+          </div>
+          <div class="btn-actions"><button class="btn btn-secondary">Batal</button><button
+              class="btn btn-primary">Simpan program</button></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Daftar program kerja</h3><span class="badge badge-info">3 program</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Kode</th>
+                <th>Nama program</th>
+                <th>Unit</th>
+                <th>Anggaran</th>
+                <th>Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-family:var(--mono);font-size:12px;font-weight:500">PKT-001</td>
+                <td style="font-weight:500">Peningkatan Mutu Layanan Rawat Jalan</td>
+                <td style="font-size:12px">Unit Pelayanan Medis</td>
+                <td style="font-family:var(--mono);font-size:12px">Rp 50.000.000</td>
+                <td style="font-size:12px">1.200 pasien/th</td>
+              </tr>
+              <tr>
+                <td style="font-family:var(--mono);font-size:12px;font-weight:500">PKT-002</td>
+                <td style="font-weight:500">Digitalisasi Rekam Medis</td>
+                <td style="font-size:12px">Unit Penunjang Medis</td>
+                <td style="font-family:var(--mono);font-size:12px">Rp 120.000.000</td>
+                <td style="font-size:12px">100% digital Q4</td>
+              </tr>
+              <tr>
+                <td style="font-family:var(--mono);font-size:12px;font-weight:500">PKT-003</td>
+                <td style="font-weight:500">Pelatihan SDM Berkelanjutan</td>
+                <td style="font-size:12px">Unit SDM & Diklat</td>
+                <td style="font-family:var(--mono);font-size:12px">Rp 35.000.000</td>
+                <td style="font-size:12px">24 sesi/th</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====== RENCANA KERJA HARIAN ====== -->
+      <div class="screen" id="screen-rkh">
+        <div class="page-header">
+          <div>
+            <h2>Rencana Kerja Harian</h2>
+            <p>Rabu, 26 Maret 2026</p>
+          </div>
+        </div>
+
+        <div class="alert-banner warning">
+          <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+          </svg>
+          <div class="alert-text"><strong>2 kegiatan carry-over</strong><span>Kegiatan dari kemarin yang belum selesai
+              telah dipindahkan</span></div>
+          <button class="btn btn-sm btn-secondary" onclick="showScreen('carryover')">Kelola</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Tambah kegiatan baru</h3>
+          </div>
+          <div class="form-group"><label class="form-label">Nama kegiatan</label><input class="form-input"
+              placeholder="Rapat koordinasi mutu layanan"></div>
+          <div class="form-group"><label class="form-label">Program kerja tahunan</label><select class="form-select">
+              <option value="">Pilih program kerja...</option>
+              <option>PKT-001 — Peningkatan Mutu Layanan Rawat Jalan</option>
+              <option>PKT-002 — Digitalisasi Rekam Medis</option>
+              <option>PKT-003 — Pelatihan SDM Berkelanjutan</option>
+            </select></div>
+          <div class="form-group"><label class="form-label">Deskripsi / detail kegiatan</label><textarea
+              class="form-textarea"
+              placeholder="Koordinasi dengan tim mutu terkait evaluasi indikator triwulan I 2026..."></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Target selesai (jam)</label><input class="form-input"
+                type="time" value="14:00"></div>
+            <div class="form-group"><label class="form-label">Lokasi kegiatan</label><input class="form-input"
+                placeholder="Ruang Rapat Lt. 2"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prioritas (Eisenhower matrix)</label>
+            <div class="eis-grid">
+              <div class="eis-option eis-do selected" onclick="selectEis(this)">
+                <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg></div>
+                <div class="eis-title">Do first</div>
+                <div class="eis-desc">Penting & mendesak — kerjakan segera</div>
+              </div>
+              <div class="eis-option eis-sc" onclick="selectEis(this)">
+                <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg></div>
+                <div class="eis-title">Schedule</div>
+                <div class="eis-desc">Penting, tidak mendesak — jadwalkan</div>
+              </div>
+              <div class="eis-option eis-de" onclick="selectEis(this)">
+                <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg></div>
+                <div class="eis-title">Delegate</div>
+                <div class="eis-desc">Mendesak, tidak penting — delegasikan</div>
+              </div>
+              <div class="eis-option eis-el" onclick="selectEis(this)">
+                <div class="eis-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg></div>
+                <div class="eis-title">Eliminate</div>
+                <div class="eis-desc">Tidak penting & tidak mendesak — eliminasi</div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-actions"><button class="btn btn-secondary">+ Tambah lagi</button><button
+              class="btn btn-primary">Submit RKH hari ini</button></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Daftar RKH — 26 Maret 2026</h3><span class="badge badge-info">5 kegiatan</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Kegiatan</th>
+                <th>Program</th>
+                <th>Prioritas</th>
+                <th>Target</th>
+                <th>Lokasi</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:500">Verifikasi data pasien</td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-001</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td style="font-family:var(--mono);font-size:12px">10:00</td>
+                <td style="font-size:12px">Ruang Admin</td>
+                <td><span class="badge badge-success">Selesai</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Update SOP pendaftaran<br><span
+                    style="font-size:11px;color:var(--warning)">&#8635; carry-over</span></td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-002</td>
+                <td><span class="badge badge-schedule">Schedule</span></td>
+                <td style="font-family:var(--mono);font-size:12px">13:00</td>
+                <td style="font-size:12px">Ruang IT</td>
+                <td><span class="badge badge-warning">Sebagian</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Rapat koordinasi mutu</td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-001</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td style="font-family:var(--mono);font-size:12px">14:00</td>
+                <td style="font-size:12px">Ruang Rapat Lt.2</td>
+                <td><span class="badge badge-neutral">Belum</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Pelatihan sistem baru</td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-003</td>
+                <td><span class="badge badge-delegate">Delegate</span></td>
+                <td style="font-family:var(--mono);font-size:12px">16:00</td>
+                <td style="font-size:12px">Lab Komputer</td>
+                <td><span class="badge badge-success">Selesai</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Review data klaim BPJS<br><span
+                    style="font-size:11px;color:var(--warning)">&#8635; carry-over</span></td>
+                <td style="font-size:12px;color:var(--text-secondary)">PKT-001</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td style="font-family:var(--mono);font-size:12px">17:00</td>
+                <td style="font-size:12px">Ruang Keuangan</td>
+                <td><span class="badge badge-warning">Sebagian</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ====== CAPAIAN ====== -->
+      <div class="screen" id="screen-capaian">
+        <div class="page-header">
+          <div>
+            <h2>Capaian Akhir Hari</h2>
+            <p>Input status dan keterangan capaian per kegiatan</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Capaian — 26 Maret 2026</h3>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:25%">Kegiatan</th>
+                <th>Prioritas</th>
+                <th style="width:18%">Status capaian</th>
+                <th style="width:35%">Keterangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:500">Verifikasi data pasien</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td><select class="form-select" style="font-size:12px;padding:6px 10px">
+                    <option selected>Selesai</option>
+                    <option>Sebagian</option>
+                    <option>Belum</option>
+                  </select></td>
+                <td><input class="form-input" style="font-size:12px;padding:6px 10px"
+                    value="Selesai 45 berkas, tidak ada kendala"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Update SOP pendaftaran</td>
+                <td><span class="badge badge-schedule">Schedule</span></td>
+                <td><select class="form-select" style="font-size:12px;padding:6px 10px">
+                    <option>Selesai</option>
+                    <option selected>Sebagian</option>
+                    <option>Belum</option>
+                  </select></td>
+                <td><input class="form-input" style="font-size:12px;padding:6px 10px"
+                    value="Draft 70% selesai, menunggu review legal"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Rapat koordinasi mutu</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td><select class="form-select" style="font-size:12px;padding:6px 10px">
+                    <option selected>Selesai</option>
+                    <option>Sebagian</option>
+                    <option>Belum</option>
+                  </select></td>
+                <td><input class="form-input" style="font-size:12px;padding:6px 10px"
+                    value="MoM sudah dibuat dan didistribusikan"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Pelatihan sistem baru</td>
+                <td><span class="badge badge-delegate">Delegate</span></td>
+                <td><select class="form-select" style="font-size:12px;padding:6px 10px">
+                    <option selected>Selesai</option>
+                    <option>Sebagian</option>
+                    <option>Belum</option>
+                  </select></td>
+                <td><input class="form-input" style="font-size:12px;padding:6px 10px"
+                    value="20 peserta hadir, materi tersampaikan"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">Review data klaim BPJS</td>
+                <td><span class="badge badge-do">Do first</span></td>
+                <td><select class="form-select" style="font-size:12px;padding:6px 10px">
+                    <option>Selesai</option>
+                    <option selected>Sebagian</option>
+                    <option>Belum</option>
+                  </select></td>
+                <td><input class="form-input" style="font-size:12px;padding:6px 10px"
+                    value="40% selesai, data bulan Feb masih pending"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="btn-actions" style="margin-top:16px"><button class="btn btn-primary">Submit capaian hari
+              ini</button></div>
+        </div>
+      </div>
+
+      <!-- ====== CARRY OVER ====== -->
+      <div class="screen" id="screen-carryover">
+        <div class="page-header">
+          <div>
+            <h2>Carry-Over</h2>
+            <p>Kegiatan dari hari sebelumnya yang belum terselesaikan</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Kegiatan tertunda</h3><span class="badge badge-warning">2 item</span>
+          </div>
+          <div class="co-item">
+            <div style="width:4px;height:60px;border-radius:2px;background:var(--schedule);flex-shrink:0"></div>
+            <div class="co-info">
+              <h4>Update SOP pendaftaran</h4>
+              <p>Dari: 25 Mar 2026 &nbsp;|&nbsp; Program: PKT-002 &nbsp;|&nbsp; Prioritas: <span
+                  style="color:var(--schedule);font-weight:600">Schedule</span></p>
+            </div>
+            <div class="co-progress">
+              <div class="co-pct">70%</div>
+              <div class="co-plabel">Capaian</div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-sm btn-success" style="color:#fff">Lanjutkan</button>
+              <button class="btn btn-sm btn-danger">Hapus</button>
+            </div>
+          </div>
+          <div class="co-item">
+            <div style="width:4px;height:60px;border-radius:2px;background:var(--do-first);flex-shrink:0"></div>
+            <div class="co-info">
+              <h4>Review data klaim BPJS</h4>
+              <p>Dari: 25 Mar 2026 &nbsp;|&nbsp; Program: PKT-001 &nbsp;|&nbsp; Prioritas: <span
+                  style="color:var(--do-first);font-weight:600">Do first</span></p>
+            </div>
+            <div class="co-progress">
+              <div class="co-pct">40%</div>
+              <div class="co-plabel">Capaian</div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-sm btn-success" style="color:#fff">Lanjutkan</button>
+              <button class="btn btn-sm btn-danger">Hapus</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div id="fb-tab-1" style="display:none">
+      <!-- ====== UMPAN BALIK ====== -->
+      <div class="screen" id="screen-feedback">
+        <div class="page-header">
+          <div>
+            <h2>Umpan Balik Hierarkis</h2>
+            <p>Review berjenjang: Supervisor → Kepala Bidang → Wakil Direktur</p>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchFbTab(this,0)">Review kegiatan</button>
+          <button class="tab-btn" onclick="switchFbTab(this,1)">Riwayat umpan balik</button>
+        </div>
+
+        <div id="fb-tab-0">
+          <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;">
+            <div class="card" style="padding:20px">
+              <h3 style="font-size:14px;margin-bottom:16px">Alur umpan balik</h3>
+              <div class="fb-flow">
+                <div class="fb-step completed">
+                  <div class="fb-dot" style="background:var(--accent)">L1</div>
+                  <div class="fb-content">
+                    <div class="fb-title">Supervisor</div>
+                    <div class="fb-person">Dr. Rina Wati</div><span class="badge badge-success"
+                      style="margin-top:6px">Aktif</span>
+                  </div>
+                </div>
+                <div class="fb-step">
+                  <div class="fb-dot" style="background:var(--purple)">L2</div>
+                  <div class="fb-content">
+                    <div class="fb-title">Kepala bidang</div>
+                    <div class="fb-person">Dr. Ahmad Fauzi</div><span class="badge badge-neutral"
+                      style="margin-top:6px">Menunggu</span>
+                  </div>
+                </div>
+                <div class="fb-step">
+                  <div class="fb-dot" style="background:var(--do-first)">L3</div>
+                  <div class="fb-content">
+                    <div class="fb-title">Wakil direktur</div>
+                    <div class="fb-person">Prof. Hendra</div><span class="badge badge-neutral"
+                      style="margin-top:6px">Menunggu</span>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+                <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Staf yang direview</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+                  <div
+                    style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600">
+                    BS</div>
+                  <div>
+                    <div style="font-size:13px;font-weight:500">Budi Santoso</div>
+                    <div style="font-size:11px;color:var(--text-secondary)">26 Maret 2026</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <h3>Form umpan balik — Supervisor (L1)</h3>
+                </div>
+                <div
+                  style="background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 16px;margin-bottom:16px">
+                  <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Kegiatan yang direview</div>
+                  <div style="font-size:14px;font-weight:600">Update SOP pendaftaran</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">Status capaian: <span
+                      class="badge badge-warning">Sebagian — 70%</span></div>
+                </div>
+                <div class="form-group"><label class="form-label">Isi umpan balik</label><textarea class="form-textarea"
+                    placeholder="Perlu dipercepat penyelesaian draft SOP. Pastikan melibatkan bagian legal sebelum finalisasi..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Skor kinerja</label>
+                  <div class="star-rating">
+                    <div class="star-btn active" onclick="setStars(this,1)">1</div>
+                    <div class="star-btn active" onclick="setStars(this,2)">2</div>
+                    <div class="star-btn active" onclick="setStars(this,3)">3</div>
+                    <div class="star-btn" onclick="setStars(this,4)">4</div>
+                    <div class="star-btn" onclick="setStars(this,5)">5</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Status review</label>
+                  <div class="status-btns">
+                    <button class="status-btn sb-approve" onclick="selectStatus(this)">&#10003; Setujui</button>
+                    <button class="status-btn sb-revise selected" onclick="selectStatus(this)">&#9998; Perlu
+                      perbaikan</button>
+                    <button class="status-btn sb-escalate" onclick="selectStatus(this)">&#8679; Eskalasi ke L2</button>
+                  </div>
+                </div>
+                <div class="btn-actions"><button class="btn btn-primary">Kirim umpan balik</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="fb-tab-1" style="display:none">
+          <div class="card">
+            <div class="card-header">
+              <h3>Riwayat umpan balik terbaru</h3>
+            </div>
+            <div class="notif-list-item">
+              <div class="notif-icon" style="background:var(--success-bg)"><svg width="18" height="18"
+                  viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg></div>
+              <div class="notif-text"><strong>Verifikasi data pasien — Disetujui (L1)</strong><span>Dr. Rina Wati:
+                  "Kerja bagus, semua berkas terverifikasi tepat waktu" — Skor: 5/5</span></div>
+              <span class="notif-time">10:45</span>
+            </div>
+            <div class="notif-list-item">
+              <div class="notif-icon" style="background:var(--warning-bg)"><svg width="18" height="18"
+                  viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg></div>
+              <div class="notif-text"><strong>Update SOP pendaftaran — Perlu perbaikan (L1)</strong><span>Dr. Rina Wati:
+                  "Perlu dipercepat, libatkan bagian legal" — Skor: 3/5</span></div>
+              <span class="notif-time">21:30</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== RTL ====== -->
+      <div class="screen" id="screen-rtl">
+        <div class="page-header">
+          <div>
+            <h2>Rencana Tindak Lanjut</h2>
+            <p>Input RTL berdasarkan umpan balik yang diterima</p>
+          </div>
+        </div>
+
         <div class="card">
-          <div class="card-header"><h3>Riwayat umpan balik terbaru</h3></div>
-          <div class="notif-list-item">
-            <div class="notif-icon" style="background:var(--success-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-            <div class="notif-text"><strong>Verifikasi data pasien — Disetujui (L1)</strong><span>Dr. Rina Wati: "Kerja bagus, semua berkas terverifikasi tepat waktu" — Skor: 5/5</span></div>
-            <span class="notif-time">10:45</span>
+          <div class="card-header">
+            <h3>Input RTL baru</h3>
+          </div>
+          <div
+            style="background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:16px">
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;font-weight:600">Umpan balik yang
+              diterima:</div>
+            <div class="fb-quote">L1 (Supervisor — Dr. Rina): "Perlu dipercepat penyelesaian draft SOP. Pastikan
+              melibatkan bagian legal." — Skor: 3/5</div>
+            <div class="fb-quote">L2 (Ka. Bidang — Dr. Ahmad): "Libatkan tim legal sebelum finalisasi, deadline
+              diperpendek." — Skor: 3/5</div>
+          </div>
+          <div class="form-group"><label class="form-label">Isi rencana tindak lanjut</label><textarea
+              class="form-textarea" style="min-height:100px"
+              placeholder="1. Jadwalkan meeting dengan tim legal hari Kamis pagi&#10;2. Selesaikan draft SOP paling lambat Jumat siang&#10;3. Submit ke Ka. Bidang untuk review final hari Senin"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Target tanggal</label><input class="form-input"
+                type="date" value="2026-03-28"></div>
+            <div class="form-group"><label class="form-label">Status RTL</label><select class="form-select">
+                <option>Belum mulai</option>
+                <option selected>Dalam proses</option>
+                <option>Selesai</option>
+              </select></div>
+          </div>
+          <div class="btn-actions"><button class="btn btn-primary">Submit RTL</button></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Riwayat RTL</h3>
+          </div>
+          <div class="rtl-item">
+            <div style="width:4px;height:48px;border-radius:2px;background:var(--warning)"></div>
+            <div class="rtl-info">
+              <h4>Finalisasi SOP pendaftaran + review legal</h4>
+              <p>Target: 28 Mar 2026 &nbsp;|&nbsp; Kegiatan: Update SOP pendaftaran</p>
+            </div>
+            <span class="badge badge-warning">Dalam proses</span>
+          </div>
+          <div class="rtl-item">
+            <div style="width:4px;height:48px;border-radius:2px;background:var(--success)"></div>
+            <div class="rtl-info">
+              <h4>Revisi laporan keuangan Q1</h4>
+              <p>Target: 25 Mar 2026 &nbsp;|&nbsp; Kegiatan: Laporan keuangan triwulan</p>
+            </div>
+            <span class="badge badge-success">Selesai</span>
+          </div>
+          <div class="rtl-item">
+            <div style="width:4px;height:48px;border-radius:2px;background:var(--success)"></div>
+            <div class="rtl-info">
+              <h4>Update database pegawai baru</h4>
+              <p>Target: 22 Mar 2026 &nbsp;|&nbsp; Kegiatan: Pendataan SDM</p>
+            </div>
+            <span class="badge badge-success">Selesai</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== NOTIFIKASI ====== -->
+      <div class="screen" id="screen-notifikasi">
+        <div class="page-header">
+          <div>
+            <h2>Notifikasi</h2>
+            <p>Semua pemberitahuan sistem</p>
+          </div>
+          <button class="btn btn-secondary btn-sm">Tandai semua dibaca</button>
+        </div>
+        <div class="card">
+          <div class="notif-list-item"
+            style="background:var(--danger-bg);margin:-24px -24px 0;padding:16px 24px;border-radius:var(--radius-lg) var(--radius-lg) 0 0">
+            <div class="notif-icon" style="background:rgba(255,255,255,0.8)"><svg width="18" height="18"
+                viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg></div>
+            <div class="notif-text"><strong style="color:var(--danger)">Carry-over: 2 kegiatan belum
+                selesai</strong><span>Kegiatan kemarin dipindahkan otomatis ke hari ini</span></div>
+            <span class="notif-time">06:00</span>
           </div>
           <div class="notif-list-item">
-            <div class="notif-icon" style="background:var(--warning-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
-            <div class="notif-text"><strong>Update SOP pendaftaran — Perlu perbaikan (L1)</strong><span>Dr. Rina Wati: "Perlu dipercepat, libatkan bagian legal" — Skor: 3/5</span></div>
+            <div class="notif-icon" style="background:var(--info-bg)"><svg width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="var(--info)" stroke-width="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg></div>
+            <div class="notif-text"><strong>Umpan balik L1 diterima dari Dr. Rina Wati</strong><span>Kegiatan: Update
+                SOP pendaftaran — Status: Perlu perbaikan</span></div>
             <span class="notif-time">21:30</span>
           </div>
+          <div class="notif-list-item">
+            <div class="notif-icon" style="background:var(--success-bg)"><svg width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="var(--success)" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg></div>
+            <div class="notif-text"><strong>RKH hari ini berhasil disubmit</strong><span>5 kegiatan tercatat untuk Rabu,
+                26 Maret 2026</span></div>
+            <span class="notif-time">08:15</span>
+          </div>
+          <div class="notif-list-item">
+            <div class="notif-icon" style="background:var(--warning-bg)"><svg width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="var(--warning)" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg></div>
+            <div class="notif-text"><strong>RTL jatuh tempo besok: Finalisasi SOP pendaftaran</strong><span>Target: 28
+                Maret 2026 — Status: Dalam proses</span></div>
+            <span class="notif-time">Kemarin</span>
+          </div>
+          <div class="notif-list-item">
+            <div class="notif-icon" style="background:var(--purple-bg)"><svg width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="var(--purple)" stroke-width="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg></div>
+            <div class="notif-text"><strong>Umpan balik L2 — Dr. Ahmad Fauzi memerlukan tindakan</strong><span>Kegiatan:
+                Update SOP — Eskalasi dari L1</span></div>
+            <span class="notif-time">Kemarin</span>
+          </div>
+          <div class="notif-list-item">
+            <div class="notif-icon" style="background:var(--success-bg)"><svg width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="var(--success)" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg></div>
+            <div class="notif-text"><strong>Verifikasi data pasien — Disetujui oleh Supervisor</strong><span>Skor
+                kinerja: 5/5 — Bagus!</span></div>
+            <span class="notif-time">2 hari lalu</span>
+          </div>
         </div>
       </div>
+
     </div>
-
-    <!-- ====== RTL ====== -->
-    <div class="screen" id="screen-rtl">
-      <div class="page-header">
-        <div><h2>Rencana Tindak Lanjut</h2><p>Input RTL berdasarkan umpan balik yang diterima</p></div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Input RTL baru</h3></div>
-        <div style="background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:16px">
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;font-weight:600">Umpan balik yang diterima:</div>
-          <div class="fb-quote">L1 (Supervisor — Dr. Rina): "Perlu dipercepat penyelesaian draft SOP. Pastikan melibatkan bagian legal." — Skor: 3/5</div>
-          <div class="fb-quote">L2 (Ka. Bidang — Dr. Ahmad): "Libatkan tim legal sebelum finalisasi, deadline diperpendek." — Skor: 3/5</div>
-        </div>
-        <div class="form-group"><label class="form-label">Isi rencana tindak lanjut</label><textarea class="form-textarea" style="min-height:100px" placeholder="1. Jadwalkan meeting dengan tim legal hari Kamis pagi&#10;2. Selesaikan draft SOP paling lambat Jumat siang&#10;3. Submit ke Ka. Bidang untuk review final hari Senin"></textarea></div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Target tanggal</label><input class="form-input" type="date" value="2026-03-28"></div>
-          <div class="form-group"><label class="form-label">Status RTL</label><select class="form-select"><option>Belum mulai</option><option selected>Dalam proses</option><option>Selesai</option></select></div>
-        </div>
-        <div class="btn-actions"><button class="btn btn-primary">Submit RTL</button></div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Riwayat RTL</h3></div>
-        <div class="rtl-item">
-          <div style="width:4px;height:48px;border-radius:2px;background:var(--warning)"></div>
-          <div class="rtl-info"><h4>Finalisasi SOP pendaftaran + review legal</h4><p>Target: 28 Mar 2026 &nbsp;|&nbsp; Kegiatan: Update SOP pendaftaran</p></div>
-          <span class="badge badge-warning">Dalam proses</span>
-        </div>
-        <div class="rtl-item">
-          <div style="width:4px;height:48px;border-radius:2px;background:var(--success)"></div>
-          <div class="rtl-info"><h4>Revisi laporan keuangan Q1</h4><p>Target: 25 Mar 2026 &nbsp;|&nbsp; Kegiatan: Laporan keuangan triwulan</p></div>
-          <span class="badge badge-success">Selesai</span>
-        </div>
-        <div class="rtl-item">
-          <div style="width:4px;height:48px;border-radius:2px;background:var(--success)"></div>
-          <div class="rtl-info"><h4>Update database pegawai baru</h4><p>Target: 22 Mar 2026 &nbsp;|&nbsp; Kegiatan: Pendataan SDM</p></div>
-          <span class="badge badge-success">Selesai</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ====== NOTIFIKASI ====== -->
-    <div class="screen" id="screen-notifikasi">
-      <div class="page-header">
-        <div><h2>Notifikasi</h2><p>Semua pemberitahuan sistem</p></div>
-        <button class="btn btn-secondary btn-sm">Tandai semua dibaca</button>
-      </div>
-      <div class="card">
-        <div class="notif-list-item" style="background:var(--danger-bg);margin:-24px -24px 0;padding:16px 24px;border-radius:var(--radius-lg) var(--radius-lg) 0 0">
-          <div class="notif-icon" style="background:rgba(255,255,255,0.8)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-          <div class="notif-text"><strong style="color:var(--danger)">Carry-over: 2 kegiatan belum selesai</strong><span>Kegiatan kemarin dipindahkan otomatis ke hari ini</span></div>
-          <span class="notif-time">06:00</span>
-        </div>
-        <div class="notif-list-item">
-          <div class="notif-icon" style="background:var(--info-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-          <div class="notif-text"><strong>Umpan balik L1 diterima dari Dr. Rina Wati</strong><span>Kegiatan: Update SOP pendaftaran — Status: Perlu perbaikan</span></div>
-          <span class="notif-time">21:30</span>
-        </div>
-        <div class="notif-list-item">
-          <div class="notif-icon" style="background:var(--success-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-          <div class="notif-text"><strong>RKH hari ini berhasil disubmit</strong><span>5 kegiatan tercatat untuk Rabu, 26 Maret 2026</span></div>
-          <span class="notif-time">08:15</span>
-        </div>
-        <div class="notif-list-item">
-          <div class="notif-icon" style="background:var(--warning-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="notif-text"><strong>RTL jatuh tempo besok: Finalisasi SOP pendaftaran</strong><span>Target: 28 Maret 2026 — Status: Dalam proses</span></div>
-          <span class="notif-time">Kemarin</span>
-        </div>
-        <div class="notif-list-item">
-          <div class="notif-icon" style="background:var(--purple-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-          <div class="notif-text"><strong>Umpan balik L2 — Dr. Ahmad Fauzi memerlukan tindakan</strong><span>Kegiatan: Update SOP — Eskalasi dari L1</span></div>
-          <span class="notif-time">Kemarin</span>
-        </div>
-        <div class="notif-list-item">
-          <div class="notif-icon" style="background:var(--success-bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-          <div class="notif-text"><strong>Verifikasi data pasien — Disetujui oleh Supervisor</strong><span>Skor kinerja: 5/5 — Bagus!</span></div>
-          <span class="notif-time">2 hari lalu</span>
-        </div>
-      </div>
-    </div>
-
   </div>
-</div>
 
-<script>
-const screenTitles = {
-  dashboard: ['Dashboard', 'Ringkasan kinerja harian'],
-  proker: ['Program Kerja Tahunan', 'Kelola program kerja unit'],
-  rkh: ['Rencana Kerja Harian', 'Input dan kelola kegiatan harian'],
-  capaian: ['Capaian Akhir Hari', 'Input status capaian kegiatan'],
-  carryover: ['Carry-Over', 'Kegiatan tertunda dari hari sebelumnya'],
-  feedback: ['Umpan Balik', 'Review berjenjang hierarkis'],
-  rtl: ['Rencana Tindak Lanjut', 'Tindak lanjut pasca umpan balik'],
-  notifikasi: ['Notifikasi', 'Pemberitahuan sistem']
-};
+  <script>
+    const screenTitles = {
+      dashboard: ['Dashboard', 'Ringkasan kinerja harian'],
+      proker: ['Program Kerja Tahunan', 'Kelola program kerja unit'],
+      rkh: ['Rencana Kerja Harian', 'Input dan kelola kegiatan harian'],
+      capaian: ['Capaian Akhir Hari', 'Input status capaian kegiatan'],
+      carryover: ['Carry-Over', 'Kegiatan tertunda dari hari sebelumnya'],
+      feedback: ['Umpan Balik', 'Review berjenjang hierarkis'],
+      rtl: ['Rencana Tindak Lanjut', 'Tindak lanjut pasca umpan balik'],
+      notifikasi: ['Notifikasi', 'Pemberitahuan sistem']
+    };
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const items = document.querySelectorAll('.nav-item');
-  const map = ['dashboard','proker','rkh','capaian','carryover','feedback','rtl','notifikasi'];
-  const idx = map.indexOf(id);
-  if (idx >= 0 && items[idx]) items[idx].classList.add('active');
-  document.getElementById('headerTitle').textContent = screenTitles[id][0];
-  document.getElementById('headerSub').textContent = screenTitles[id][1];
-  window.scrollTo({top:0, behavior:'smooth'});
-}
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-' + id).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const items = document.querySelectorAll('.nav-item');
+      const map = ['dashboard', 'proker', 'rkh', 'capaian', 'carryover', 'feedback', 'rtl', 'notifikasi'];
+      const idx = map.indexOf(id);
+      if (idx >= 0 && items[idx]) items[idx].classList.add('active');
+      document.getElementById('headerTitle').textContent = screenTitles[id][0];
+      document.getElementById('headerSub').textContent = screenTitles[id][1];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-function selectEis(el) {
-  document.querySelectorAll('.eis-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-}
+    function selectEis(el) {
+      document.querySelectorAll('.eis-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
 
-function setStars(el, n) {
-  const stars = el.parentElement.querySelectorAll('.star-btn');
-  stars.forEach((s, i) => s.classList.toggle('active', i < n));
-}
+    function setStars(el, n) {
+      const stars = el.parentElement.querySelectorAll('.star-btn');
+      stars.forEach((s, i) => s.classList.toggle('active', i < n));
+    }
 
-function selectStatus(el) {
-  el.parentElement.querySelectorAll('.status-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-}
+    function selectStatus(el) {
+      el.parentElement.querySelectorAll('.status-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
 
-function switchFbTab(btn, idx) {
-  btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('fb-tab-0').style.display = idx === 0 ? 'block' : 'none';
-  document.getElementById('fb-tab-1').style.display = idx === 1 ? 'block' : 'none';
-}
-</script>
+    function switchFbTab(btn, idx) {
+      btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('fb-tab-0').style.display = idx === 0 ? 'block' : 'none';
+      document.getElementById('fb-tab-1').style.display = idx === 1 ? 'block' : 'none';
+    }
+  </script>
 </body>
+
 </html>
